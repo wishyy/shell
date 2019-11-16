@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 			char s[100];
 			if(job->procs->argc == 0)
 				chdir(getenv("HOME"));
-			if(chdir(job->procs->argv[1]) < 0)	{
+			else if(chdir(job->procs->argv[1]) < 0)	{
 				printf(DIR_ERR);
 			}
 			printf("%s\n", getcwd(s, 100)); 
