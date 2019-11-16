@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 		//built-in: cd
 		if(strcmp(job->procs->cmd, "cd") == 0)	{
 			char s[100];
-			if(job->procs->argc == 0)
+			if(job->procs->argv[1] == NULL)
 				chdir(getenv("HOME"));
 			else if(chdir(job->procs->argv[1]) < 0)	{
 				printf(DIR_ERR);
