@@ -35,6 +35,16 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 
+		//built-in: cd
+		if(strcmp(job->procs->cmd, "cd") == 0)	{
+			perror("cd not implemented");
+			
+
+
+
+			continue;
+		}
+
 		// example of good error handling!
 		if ((pid = fork()) < 0) {
 			perror("fork error");
