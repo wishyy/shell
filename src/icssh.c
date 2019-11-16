@@ -47,6 +47,12 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
+		//build-in: estatus
+		if(strcmp(job->procs->cmd, "estatus") == 0)	{
+			printf("%d\n", pid);
+			continue;
+		}
+
 		// example of good error handling!
 		if ((pid = fork()) < 0) {
 			perror("fork error");
