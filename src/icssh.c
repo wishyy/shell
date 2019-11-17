@@ -1,5 +1,6 @@
 #include "icssh.h"
 #include <readline/readline.h>
+#include "helpers.h"
 
 int main(int argc, char* argv[]) {
 	int exec_result;
@@ -7,9 +8,20 @@ int main(int argc, char* argv[]) {
 	pid_t pid;
 	pid_t wait_result;
 	char* line;
+	//bglist
+	struct List_t bglist;
+	bglist.comparator = comparator;
+	bglist.head = NULL;
+	bglist.length = 0;
+
 
 	// Setup segmentation fault handler
 	if (signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
+		perror("Failed to set signal handler");
+		exit(EXIT_FAILURE);
+	}
+
+	if(signal(SIGCHLD, sigchld_handler) == SIG_ERR)	{
 		perror("Failed to set signal handler");
 		exit(EXIT_FAILURE);
 	}
@@ -47,10 +59,15 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
-		//build-in: estatus
+		//built-in: estatus
 		if(strcmp(job->procs->cmd, "estatus") == 0)	{
 			printf("%d\n", pid);
 			continue;
+		}
+
+		//built-in: bglist
+		if(strcmp(job->procs->cmd, "estatus") == 0)	{
+
 		}
 
 		// example of good error handling!
@@ -58,7 +75,8 @@ int main(int argc, char* argv[]) {
 			perror("fork error");
 			exit(EXIT_FAILURE);
 		}
-		if (pid == 0) {  //If zero, then it's the child process
+		if (pid == 0) {  
+			//If zero, then it's the child process
             //get the first command in the job list
 		    proc_info* proc = job->procs;
 			exec_result = execvp(proc->cmd, proc->argv);
@@ -68,6 +86,13 @@ int main(int argc, char* argv[]) {
 			}
 			exit(EXIT_SUCCESS);
 		} else {
+			if(job->bg)	{
+				//structure stuff
+				
+
+
+				continue;
+			}
             // As the parent, wait for the foreground job to finish
 			wait_result = waitpid(pid, &exit_status, 0);
 			if (wait_result < 0) {
