@@ -117,6 +117,9 @@ int main(int argc, char* argv[]) {
 				new_bg->seconds = bg_time;
 				insertInOrder(&bglist, new_bg);
 				//dont free, continue
+				//dont no why
+				//COW fork  maybe??
+				//free in the end anyway
 				continue;
 			}
 			else {
