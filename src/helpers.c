@@ -1,11 +1,6 @@
 // Your helper functions need to be here.
 #include "helpers.h"
 
-//sigchild_handler
-void sigchld_handler()  {
-    flag = 1;
-}
-
 
 void farewells(List_t *bglist)  {
     int n = 0;

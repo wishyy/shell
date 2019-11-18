@@ -2,8 +2,12 @@
 #include "icssh.h"
 #include <readline/readline.h>
 
+int flag = 0;
 
-extern int flag;
+//sigchild_handler
+void sigchld_handler()  {
+    flag = 1;
+}
 
 int my_compare(void* a, void* b)   {
     return ((bgentry_t*)a)->seconds - ((bgentry_t*)b)->seconds;
@@ -117,9 +121,6 @@ int main(int argc, char* argv[]) {
 				new_bg->seconds = bg_time;
 				insertInOrder(&bglist, new_bg);
 				//dont free, continue
-				//dont no why
-				//COW fork  maybe??
-				//free in the end anyway
 				continue;
 			}
 			else {
