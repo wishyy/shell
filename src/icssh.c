@@ -5,7 +5,7 @@
 
 extern int flag;
 
-int compare(void* a, void* b)   {
+int my_compare(void* a, void* b)   {
     return ((bgentry_t*)a)->seconds - ((bgentry_t*)b)->seconds;
 }
 
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	char* line;
 	//bglist
 	List_t bglist;
-	bglist.comparator = compare;
+	bglist.comparator = my_compare;
 	bglist.head = NULL;
 	bglist.length = 0;
 
