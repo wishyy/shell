@@ -23,8 +23,5 @@ static int flag = 0;
 
 void sigchld_handler();
 
-int compare(void* a, void* b)   {
-    return ((bgentry_t*)a)->seconds - ((bgentry_t*)b)->seconds;
-}
 
 void farewells(List_t *bglist);

@@ -5,6 +5,10 @@
 
 extern int flag;
 
+int compare(void* a, void* b)   {
+    return ((bgentry_t*)a)->seconds - ((bgentry_t*)b)->seconds;
+}
+
 int main(int argc, char* argv[]) {
 	int exec_result;
 	int exit_status;
