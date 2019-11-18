@@ -95,6 +95,17 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
+		while(1)	{
+			proc_info *temp = job->procs; 
+			for(int i = 0; i < job->nproc; i++)	{
+				printf("%s\n", temp->cmd);
+				temp = temp->next_proc;
+				free(line);
+				free_job(job);
+				return 0;
+			}
+		}
+
 		// example of good error handling!
 		if ((pid = fork()) < 0) {
 			perror("fork error");
