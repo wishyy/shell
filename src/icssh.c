@@ -96,11 +96,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if(1)	{
-			proc_info *temp = job->procs; 
-			for(int i = 0; i < job->nproc; i++)	{
-				printf("%s\n", temp->cmd);
-				temp = temp->next_proc;
-			}
+			printf("%d\n", job->nproc);
 			free(line);
 			free_job(job);
 			return 0;
