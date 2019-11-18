@@ -18,13 +18,6 @@
 
 void sigchld_handler();
 
-
-
-
-
-
-
-
 //linked list
 /*
  * Structre for each node of the linkedList
@@ -62,9 +55,9 @@ int comparator(bgentry_t* a, bgentry_t* b)   {
  * @param list pointer to the linkedList struct
  * @param valref pointer to the data to insert into the linkedList
  */
-void insertRear(List_t* list, void* valref);
-void insertFront(List_t* list, void* valref);
-void insertInOrder(List_t* list, void* valref);
+void insertRear(List_t* list, bgentry_t* valref);
+void insertFront(List_t* list, bgentry_t* valref);
+void insertInOrder(List_t* list, bgentry_t* valref);
 
 /*
  * Each of these functions removes a single linkedList node from
@@ -74,7 +67,7 @@ void insertInOrder(List_t* list, void* valref);
  */ 
 void* removeFront(List_t* list);
 void* removeRear(List_t* list);
-void* removeByIndex(List_t* list, int n);
+bgentry_t* removeByIndex(List_t* list, int n);
 
 /* 
  * Free all nodes from the linkedList
@@ -90,3 +83,6 @@ void deleteList(List_t* list);
  * INT_MODE to print node.value as an int
  */
 void printList(List_t* list, char mode);
+
+
+void farewells(List_t *bglist);

@@ -1,6 +1,9 @@
+#include "helpers.h"
 #include "icssh.h"
 #include <readline/readline.h>
-#include "helpers.h"
+
+
+extern int flag;
 
 int main(int argc, char* argv[]) {
 	int exec_result;
@@ -9,18 +12,17 @@ int main(int argc, char* argv[]) {
 	pid_t wait_result;
 	char* line;
 	//bglist
-	struct List_t bglist;
+	List_t bglist;
 	bglist.comparator = comparator;
 	bglist.head = NULL;
 	bglist.length = 0;
-
 
 	// Setup segmentation fault handler
 	if (signal(SIGSEGV, sigsegv_handler) == SIG_ERR) {
 		perror("Failed to set signal handler");
 		exit(EXIT_FAILURE);
 	}
-
+	// Setup CHLD fault handler
 	if(signal(SIGCHLD, sigchld_handler) == SIG_ERR)	{
 		perror("Failed to set signal handler");
 		exit(EXIT_FAILURE);
@@ -28,6 +30,10 @@ int main(int argc, char* argv[]) {
 
     // print the prompt & wait for the user to enter commands string
 	while ((line = readline(SHELL_PROMPT)) != NULL) {
+		if(flag)	{
+			farewells(&bglist);
+			flag = 0;
+		}
         // MAGIC HAPPENS! Command string is parsed into a job struct
         // Will print out error message if command string is invalid
 		job_info* job = validate_input(line);
@@ -55,19 +61,30 @@ int main(int argc, char* argv[]) {
 			else if(chdir(job->procs->argv[1]) < 0)	{
 				printf(DIR_ERR);
 			}
-			printf("%s\n", getcwd(s, 100)); 
+			printf("%s\n", getcwd(s, 100));
+			free(job);
+			free(line); 
 			continue;
 		}
 
 		//built-in: estatus
 		if(strcmp(job->procs->cmd, "estatus") == 0)	{
-			printf("%d\n", pid);
+			printf("%d\n", exit_status);
+			free(job);
+			free(line);
 			continue;
 		}
 
 		//built-in: bglist
 		if(strcmp(job->procs->cmd, "estatus") == 0)	{
-
+			node_t *cur = bglist.head;
+			while(cur)	{
+				print_bgentry(cur->value);
+				cur = cur->next;
+			}
+			free(job);
+			free(line);
+			continue;
 		}
 
 		// example of good error handling!
@@ -75,6 +92,8 @@ int main(int argc, char* argv[]) {
 			perror("fork error");
 			exit(EXIT_FAILURE);
 		}
+		//get time right after fork
+		time_t bg_time = time(NULL);
 		if (pid == 0) {  
 			//If zero, then it's the child process
             //get the first command in the job list
@@ -88,19 +107,22 @@ int main(int argc, char* argv[]) {
 		} else {
 			if(job->bg)	{
 				//structure stuff
-				
-
-
-				continue;
+				bgentry_t *new_bg = malloc(sizeof(bgentry_t));
+				new_bg->job = job;
+				new_bg->pid = pid;
+				new_bg->seconds = bg_time;
+				insertInOrder(&bglist, new_bg);
+				//go free
 			}
+			else {
             // As the parent, wait for the foreground job to finish
 			wait_result = waitpid(pid, &exit_status, 0);
 			if (wait_result < 0) {
 				printf(WAIT_ERR);
 				exit(EXIT_FAILURE);
+				}
 			}
 		}
-
 		free_job(job);  // if a foreground job, we no longer need the data
 		free(line);
 	}
