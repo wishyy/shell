@@ -17,6 +17,10 @@
 #define INT_MODE 0
 #define STR_MODE 1
 
+//flag
+static int flag = 0;
+
+
 void sigchld_handler();
 
 int compare(void* a, void* b)   {

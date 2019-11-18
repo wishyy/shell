@@ -1,9 +1,6 @@
 // Your helper functions need to be here.
 #include "helpers.h"
 
-//flag
-static int flag = 0;
-
 //sigchild_handler
 void sigchld_handler()  {
     flag = 1;
