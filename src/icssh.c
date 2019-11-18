@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		//built-in: bglist
-		if(strcmp(job->procs->cmd, "estatus") == 0)	{
+		if(strcmp(job->procs->cmd, "bglist") == 0)	{
 			node_t *cur = bglist.head;
 			while(cur)	{
 				print_bgentry(cur->value);
