@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 	char* line;
 	//bglist
 	List_t bglist;
-	bglist.comparator = comparator;
+	bglist.comparator = compare;
 	bglist.head = NULL;
 	bglist.length = 0;
 
