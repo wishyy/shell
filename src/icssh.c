@@ -81,6 +81,7 @@ int main(int argc, char* argv[]) {
 
 		//built-in: bglist
 		if(strcmp(job->procs->cmd, "bglist") == 0)	{
+			printf("fuck you\n");
 			node_t *cur = bglist.head;
 			while(cur)	{
 				print_bgentry(cur->value);
@@ -116,7 +117,8 @@ int main(int argc, char* argv[]) {
 				new_bg->pid = pid;
 				new_bg->seconds = bg_time;
 				insertInOrder(&bglist, new_bg);
-				//go free
+				//dont free just continue
+				continue;
 			}
 			else {
             // As the parent, wait for the foreground job to finish
