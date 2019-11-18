@@ -95,13 +95,6 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
-		if(1)	{
-			printf("%d\n", job->nproc);
-			free(line);
-			free_job(job);
-			return 0;
-		}
-
 		// example of good error handling!
 		if ((pid = fork()) < 0) {
 			perror("fork error");
@@ -113,6 +106,15 @@ int main(int argc, char* argv[]) {
 			//If zero, then it's the child process
             //get the first command in the job list
 		    proc_info* proc = job->procs;
+			//pipe
+			
+
+
+			//redirection
+			if(proc->in_file || proc->out_file || proc->err_file)	{
+				
+
+			}
 			exec_result = execvp(proc->cmd, proc->argv);
 			if (exec_result < 0) {  //Error checking
 				printf(EXEC_ERR, proc->cmd);
