@@ -112,7 +112,6 @@ int main(int argc, char* argv[]) {
 
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
-				
 
 			}
 			exec_result = execvp(proc->cmd, proc->argv);
