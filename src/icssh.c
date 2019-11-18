@@ -81,7 +81,6 @@ int main(int argc, char* argv[]) {
 
 		//built-in: bglist
 		if(strcmp(job->procs->cmd, "bglist") == 0)	{
-			printf("fuck you\n");
 			node_t *cur = bglist.head;
 			while(cur)	{
 				print_bgentry(cur->value);
@@ -117,7 +116,7 @@ int main(int argc, char* argv[]) {
 				new_bg->pid = pid;
 				new_bg->seconds = bg_time;
 				insertInOrder(&bglist, new_bg);
-				//dont free just continue
+				//dont free, continue
 				continue;
 			}
 			else {
