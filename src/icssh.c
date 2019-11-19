@@ -113,11 +113,11 @@ int main(int argc, char* argv[]) {
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 				if(proc->in_file)	{
-					int fd = open("input.txt", O_RDONLY);
+					int fd = open(proc->in_file, O_RDONLY);
 					if(fd < 0)	{
-						perror(RD_ERR);
+						printf(RD_ERR);
 					}
-					dup2(fd, 0); // stdin now points to fd
+					dup2(fd, 0); 
 					close(fd);
 				}
 				if(proc->out_file)	{
