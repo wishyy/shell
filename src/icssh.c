@@ -112,7 +112,18 @@ int main(int argc, char* argv[]) {
 
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
-
+				if(proc->in_file)	{
+					close(0);
+					int in_fd = dup(proc->in_file);
+				}
+				if(proc->out_file)	{
+					close(1);
+					int out_fd = dup(proc->out_file);
+				}
+				if(proc->err_file)	{
+					close(2);
+					int err_fd = dup(proc->err_file);
+				}
 			}
 			exec_result = execvp(proc->cmd, proc->argv);
 			if (exec_result < 0) {  //Error checking

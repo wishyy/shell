@@ -14,8 +14,5 @@
 #include "icssh.h"
 #include "linkedList.h"
 
-#define INT_MODE 0
-#define STR_MODE 1
-
 
 void farewells(List_t *bglist);
