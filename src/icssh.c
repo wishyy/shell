@@ -115,14 +115,23 @@ int main(int argc, char* argv[]) {
 				if(proc->in_file)	{
 					close(0);
 					int in_fd = dup(proc->in_file);
+					if(in_fd < 0)	{
+						perror("dup in_file failed");
+					}
 				}
 				if(proc->out_file)	{
 					close(1);
 					int out_fd = dup(proc->out_file);
+					if(out_fd < 0)	{
+						perror("dup out_file failed");
+					}
 				}
 				if(proc->err_file)	{
 					close(2);
 					int err_fd = dup(proc->err_file);
+					if(err_fd < 0)	{
+						perror("dup err_file failed");
+					}
 				}
 			}
 			exec_result = execvp(proc->cmd, proc->argv);
