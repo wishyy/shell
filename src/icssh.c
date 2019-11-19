@@ -113,13 +113,12 @@ int main(int argc, char* argv[]) {
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 				if(proc->in_file)	{
-					if(dup(0) < 0)	{
-						perror("dup stdin failed");
-					}
-					close(0);
-					if(open(proc->in_file, O_WRONLY) < 0)	{
+					int fd = open("input.txt", O_RDONLY);
+					if(fd < 0)	{
 						perror(RD_ERR);
 					}
+					dup2(fd, 0); // stdin now points to fd
+					close(fd);
 				}
 				if(proc->out_file)	{
 					if(dup(1) < 0)	{
