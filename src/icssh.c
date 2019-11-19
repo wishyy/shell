@@ -115,28 +115,26 @@ int main(int argc, char* argv[]) {
 				if(proc->in_file)	{
 					int fd = open(proc->in_file, O_RDONLY);
 					if(fd < 0)	{
-						printf(RD_ERR);
+						perror(RD_ERR);
 					}
 					dup2(fd, 0); 
 					close(fd);
 				}
 				if(proc->out_file)	{
-					if(dup(1) < 0)	{
-						perror("dup stdout failed");
-					}
-					close(1);
-					if(open(proc->out_file, O_RDWR | O_CREAT) < 0)	{
+					int fd = open(proc->in_file, O_RDWR | O_CREAT);
+					if(fd < 0)	{
 						perror(RD_ERR);
 					}
+					dup2(fd, 1); 
+					close(fd);
 				}
 				if(proc->err_file)	{
-					if(dup(2) < 0)	{
-						perror("dup stderr failed");
-					}
-					close(2);
-					if(open(proc->err_file, O_RDWR | O_CREAT) < 0)	{
+					int fd = open(proc->in_file, O_RDWR | O_CREAT);
+					if(fd < 0)	{
 						perror(RD_ERR);
 					}
+					dup2(fd, 2); 
+					close(fd);
 				}
 			}
 			exec_result = execvp(proc->cmd, proc->argv);
