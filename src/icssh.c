@@ -107,9 +107,50 @@ int main(int argc, char* argv[]) {
             //get the first command in the job list
 		    proc_info* proc = job->procs;
 			//pipe
-			
+			if(job->nproc == 2)	{
+				int p[2], r;
+				//create pipe
+				if(pipe(p) < 0)
+				{
+					printf("syscall pipe() failed\n");
+					exit(0);
+				}
+				proc_info *left = proc;
+				proc_info *right = proc->next_proc;
 
+				if(fork() == 0){
+					close(1);
+					dup(p[1]);
+					close(p[0]);
+					close(p[1]);
+					exec_result = execvp(left->cmd, left->argv);
+					if (exec_result < 0) {  //Error checking
+						printf(EXEC_ERR, left->cmd);
+						exit(EXIT_FAILURE);
+					}
+				}
 
+				if(fork() == 0){
+					close(0);
+					dup(p[0]);
+					close(p[0]);
+					close(p[1]);
+					exec_result = execvp(right->cmd, right->argv);
+					if (exec_result < 0) {  //Error checking
+						printf(EXEC_ERR, right->cmd);
+						exit(EXIT_FAILURE);
+					}
+				}
+
+				close(p[0]);
+				close(p[1]);
+				wait(&r);
+				wait(&r);
+			}
+			//double pipe
+			if(job->nproc == 3)	{
+
+			}
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 				if(proc->in_file)	{
