@@ -113,24 +113,30 @@ int main(int argc, char* argv[]) {
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 				if(proc->in_file)	{
+					if(dup(0) < 0)	{
+						perror("dup stdin failed");
+					}
 					close(0);
-					int in_fd = dup(proc->in_file);
-					if(in_fd < 0)	{
-						perror("dup in_file failed");
+					if(open(proc->in_file, O_WRONLY) < 0)	{
+						perror(RD_ERR);
 					}
 				}
 				if(proc->out_file)	{
+					if(dup(1) < 0)	{
+						perror("dup stdout failed");
+					}
 					close(1);
-					int out_fd = dup(proc->out_file);
-					if(out_fd < 0)	{
-						perror("dup out_file failed");
+					if(open(proc->out_file, O_RDWR | O_CREAT) < 0)	{
+						perror(RD_ERR);
 					}
 				}
 				if(proc->err_file)	{
+					if(dup(2) < 0)	{
+						perror("dup stderr failed");
+					}
 					close(2);
-					int err_fd = dup(proc->err_file);
-					if(err_fd < 0)	{
-						perror("dup err_file failed");
+					if(open(proc->err_file, O_RDWR | O_CREAT) < 0)	{
+						perror(RD_ERR);
 					}
 				}
 			}
