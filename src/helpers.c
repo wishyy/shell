@@ -17,13 +17,33 @@ void farewells(List_t *bglist)  {
         if(wait_result > 0) {
             printf(BG_TERM, temp->pid, temp->job->line);
             cur = cur->next;
-            removeByIndex(bglist, n);
             free(temp->job->line);
             free(temp->job);
             free(temp);
+            removeByIndex(bglist, n);
             continue;
         }
         cur = cur->next;
         n++;
+    }
+}
+
+void killthemall(List_t *bglist)   {
+    pid_t wait_result;
+    int exit_status;
+    node_t *cur = bglist->head;
+    while(cur)  {
+        bgentry_t *temp = cur->value;
+        kill(temp->pid, SIGKILL);
+        wait_result = waitpid(temp->pid, &exit_status, 0);
+        if(wait_result < 0) {
+            printf(WAIT_ERR);
+			exit(EXIT_FAILURE);
+        }
+        free(temp->job->line);
+        free(temp->job);
+        free(temp);
+        cur = cur->next;
+        removeFront(bglist);
     }
 }

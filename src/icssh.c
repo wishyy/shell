@@ -56,6 +56,7 @@ int main(int argc, char* argv[]) {
 		// example built-in: exit
 		if (strcmp(job->procs->cmd, "exit") == 0) {
 			// Terminating the shell
+			killthemall(&bglist);
 			free(line);
 			free_job(job);
 			return 0;

@@ -16,3 +16,5 @@
 
 
 void farewells(List_t *bglist);
+
+void killthemall(List_t *bglist);
