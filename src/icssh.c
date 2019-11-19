@@ -146,6 +146,7 @@ int main(int argc, char* argv[]) {
 				close(p[1]);
 				wait(&r);
 				wait(&r);
+				exit(EXIT_SUCCESS);
 			}
 			//double pipe
 			if(job->nproc == 3)	{
