@@ -106,6 +106,7 @@ int main(int argc, char* argv[]) {
 			//If zero, then it's the child process
             //get the first command in the job list
 		    proc_info* proc = job->procs;
+
 			//pipe
 			if(job->nproc == 2)	{
 				int p[2], r;
@@ -148,11 +149,12 @@ int main(int argc, char* argv[]) {
 				wait(&r);
 				exit(EXIT_SUCCESS);
 			}
+
 			//double pipe
 			if(job->nproc == 3)	{
-				int p[2], r;
+				int p1[2], p2[2], r;
 				//create pipe
-				if(pipe(p) < 0)
+				if(pipe(p1) < 0 || pipe(p2) < 0)
 				{
 					printf("syscall pipe() failed\n");
 					exit(0);
@@ -163,9 +165,11 @@ int main(int argc, char* argv[]) {
 
 				if(fork() == 0){
 					close(1);
-					dup(p[1]);
-					close(p[0]);
-					close(p[1]);
+					dup(p1[1]);
+					close(p1[0]);
+					close(p1[1]);
+					close(p2[0]);
+					close(p2[1]);
 					exec_result = execvp(left->cmd, left->argv);
 					if (exec_result < 0) {  //Error checking
 						printf(EXEC_ERR, left->cmd);
@@ -175,11 +179,13 @@ int main(int argc, char* argv[]) {
 
 				if(fork() == 0){
 					close(0);
-					dup(p[0]);
+					dup(p1[0]);
 					close(1);
-					dup(p[1]);
-					close(p[0]);
-					close(p[1]);
+					dup(p2[1]);
+					close(p1[0]);
+					close(p1[1]);
+					close(p2[0]);
+					close(p2[1]);
 					exec_result = execvp(mid->cmd, mid->argv);
 					if (exec_result < 0) {  //Error checking
 						printf(EXEC_ERR, mid->cmd);
@@ -189,25 +195,27 @@ int main(int argc, char* argv[]) {
 
 				if(fork() == 0)	{
 					close(0);
-					dup(p[0]);
-					close(p[0]);
-					close(p[1]);
+					dup(p2[0]);
+					close(p1[0]);
+					close(p1[1]);
+					close(p2[0]);
+					close(p2[1]);
 					exec_result = execvp(right->cmd, right->argv);
 					if(exec_result < 0)	{
 						printf(EXEC_ERR, right->cmd);
 						exit(EXIT_FAILURE);
 					}
 				}
-
-				close(p[0]);
-				close(p[1]);
+				close(p1[0]);
+				close(p1[1]);
+				close(p2[0]);
+				close(p2[1]);
 				wait(&r);
 				wait(&r);
 				wait(&r);
 				exit(EXIT_SUCCESS);
-
-
 			}
+
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 				if(proc->in_file)	{
@@ -236,6 +244,7 @@ int main(int argc, char* argv[]) {
 					close(fd);
 				}
 			}
+
 			exec_result = execvp(proc->cmd, proc->argv);
 			if (exec_result < 0) {  //Error checking
 				printf(EXEC_ERR, proc->cmd);
