@@ -150,6 +150,62 @@ int main(int argc, char* argv[]) {
 			}
 			//double pipe
 			if(job->nproc == 3)	{
+				int p[2], r;
+				//create pipe
+				if(pipe(p) < 0)
+				{
+					printf("syscall pipe() failed\n");
+					exit(0);
+				}
+				proc_info *left = proc;
+				proc_info *mid = proc->next_proc;
+				proc_info *right = proc->next_proc->next_proc;
+
+				if(fork() == 0){
+					close(1);
+					dup(p[1]);
+					close(p[0]);
+					close(p[1]);
+					exec_result = execvp(left->cmd, left->argv);
+					if (exec_result < 0) {  //Error checking
+						printf(EXEC_ERR, left->cmd);
+						exit(EXIT_FAILURE);
+					}
+				}
+
+				if(fork() == 0){
+					close(0);
+					dup(p[0]);
+					close(1);
+					dup(p[1]);
+					close(p[0]);
+					close(p[1]);
+					exec_result = execvp(mid->cmd, mid->argv);
+					if (exec_result < 0) {  //Error checking
+						printf(EXEC_ERR, mid->cmd);
+						exit(EXIT_FAILURE);
+					}
+				}
+
+				if(fork() == 0)	{
+					close(0);
+					dup(p[0]);
+					close(p[0]);
+					close(p[1]);
+					exec_result = execvp(right->cmd, right->argv);
+					if(exec_result < 0)	{
+						printf(EXEC_ERR, right->cmd);
+						exit(EXIT_FAILURE);
+					}
+				}
+
+				close(p[0]);
+				close(p[1]);
+				wait(&r);
+				wait(&r);
+				wait(&r);
+				exit(EXIT_SUCCESS);
+
 
 			}
 			//redirection
