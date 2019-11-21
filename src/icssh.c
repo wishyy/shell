@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
 						close(fd);
 					}
 					if(proc->out_file)	{
-						int fd = open(proc->in_file, O_RDWR | O_CREAT, 0644);
+						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
 						if(fd < 0)	{
 							perror(RD_ERR);
 						}
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 						close(fd);
 					}
 					if(proc->err_file)	{
-						int fd = open(proc->in_file, O_RDWR | O_CREAT, 0644);
+						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
 						if(fd < 0)	{
 							perror(RD_ERR);
 						}
