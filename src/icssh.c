@@ -121,6 +121,7 @@ int main(int argc, char* argv[]) {
 					if(proc->out_file)	{
 						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
 						if(fd < 0)	{
+							printf("%d\n", fd);
 							perror(RD_ERR);
 						}
 						dup2(fd, 1); 
