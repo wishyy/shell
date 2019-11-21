@@ -122,17 +122,15 @@ int main(int argc, char* argv[]) {
 						close(fd);
 					}
 					if(proc->out_file)	{
-						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
+						int fd = open(proc->out_file, O_WRONLY | O_CREAT);
 						if(fd < 0)	{
-							printf("%d\n", errno);
-							printf("%s\n", proc->in_file);
 							perror(RD_ERR);
 						}
 						dup2(fd, 1); 
 						close(fd);
 					}
 					if(proc->err_file)	{
-						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
+						int fd = open(proc->err_file, O_WRONLY | O_CREAT);
 						if(fd < 0)	{
 							perror(RD_ERR);
 						}
