@@ -1,8 +1,11 @@
 #include "helpers.h"
 #include "icssh.h"
+#include <errno.h>
 #include <readline/readline.h>
 
 int flag = 0;
+
+extern int errno;
 
 //sigchild_handler
 void sigchld_handler()  {
@@ -121,7 +124,7 @@ int main(int argc, char* argv[]) {
 					if(proc->out_file)	{
 						int fd = open(proc->in_file, O_WRONLY | O_CREAT, 0644);
 						if(fd < 0)	{
-							printf("%d\n", fd);
+							printf("%d\n", errno);
 							perror(RD_ERR);
 						}
 						dup2(fd, 1); 
