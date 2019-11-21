@@ -111,7 +111,6 @@ int main(int argc, char* argv[]) {
 			//redirection
 			if(proc->in_file || proc->out_file || proc->err_file)	{
 					if(proc->in_file)	{
-						printf("got in\n");
 						int fd = open(proc->in_file, O_RDONLY);
 						if(fd < 0)	{
 							perror(RD_ERR);
@@ -120,8 +119,7 @@ int main(int argc, char* argv[]) {
 						close(fd);
 					}
 					if(proc->out_file)	{
-						printf("got out\n");
-						int fd = open(proc->in_file, O_RDWR | O_CREAT);
+						int fd = open(proc->in_file, O_RDWR | O_CREAT, 0644);
 						if(fd < 0)	{
 							perror(RD_ERR);
 						}
@@ -129,8 +127,7 @@ int main(int argc, char* argv[]) {
 						close(fd);
 					}
 					if(proc->err_file)	{
-						printf("got err\n");
-						int fd = open(proc->in_file, O_RDWR | O_CREAT);
+						int fd = open(proc->in_file, O_RDWR | O_CREAT, 0644);
 						if(fd < 0)	{
 							perror(RD_ERR);
 						}
