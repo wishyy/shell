@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 			if(job->procs->argv[1] == NULL)
 				chdir(getenv("HOME"));
 			else if(chdir(job->procs->argv[1]) < 0)	{
-				printf(DIR_ERR);
+				perror(DIR_ERR);
 			}
 			printf("%s\n", getcwd(s, 100));
 			free(job);
@@ -107,6 +107,35 @@ int main(int argc, char* argv[]) {
 			//If zero, then it's the child process
             //get the first command in the job list
 		    proc_info* proc = job->procs;
+
+			//redirection
+			if(proc->in_file || proc->out_file || proc->err_file)	{
+					if(proc->in_file)	{
+						int fd = open(proc->in_file, O_RDONLY);
+						if(fd < 0)	{
+							perror(RD_ERR);
+						}
+						dup2(fd, 0); 
+						close(fd);
+					}
+					if(proc->out_file)	{
+						int fd = open(proc->in_file, O_RDWR | O_CREAT);
+						if(fd < 0)	{
+							perror(RD_ERR);
+						}
+						dup2(fd, 1); 
+						close(fd);
+						return 0;
+					}
+					if(proc->err_file)	{
+						int fd = open(proc->in_file, O_RDWR | O_CREAT);
+						if(fd < 0)	{
+							perror(RD_ERR);
+						}
+						dup2(fd, 2); 
+						close(fd);
+					}
+			}
 
 			//pipe
 			if(job->nproc == 2)	{
@@ -150,9 +179,9 @@ int main(int argc, char* argv[]) {
 				wait(&r);
 				exit(EXIT_SUCCESS);
 			}
-
+			
 			//double pipe
-			if(job->nproc == 3)	{
+			if(job->nproc == 3)	{   
 				int p1[2], p2[2], r;
 				//create pipe
 				if(pipe(p1) < 0 || pipe(p2) < 0)
@@ -216,35 +245,7 @@ int main(int argc, char* argv[]) {
 				wait(&r);
 				exit(EXIT_SUCCESS);
 			}
-
-			//redirection
-			if(proc->in_file || proc->out_file || proc->err_file)	{
-				if(proc->in_file)	{
-					int fd = open(proc->in_file, O_RDONLY);
-					if(fd < 0)	{
-						perror(RD_ERR);
-					}
-					dup2(fd, 0); 
-					close(fd);
-				}
-				if(proc->out_file)	{
-					int fd = open(proc->in_file, O_RDWR | O_CREAT);
-					if(fd < 0)	{
-						perror(RD_ERR);
-					}
-					dup2(fd, 1); 
-					close(fd);
-					return 0;
-				}
-				if(proc->err_file)	{
-					int fd = open(proc->in_file, O_RDWR | O_CREAT);
-					if(fd < 0)	{
-						perror(RD_ERR);
-					}
-					dup2(fd, 2); 
-					close(fd);
-				}
-			}
+			
 
 			exec_result = execvp(proc->cmd, proc->argv);
 			if (exec_result < 0) {  //Error checking
