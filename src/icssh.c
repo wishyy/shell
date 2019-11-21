@@ -125,7 +125,6 @@ int main(int argc, char* argv[]) {
 						}
 						dup2(fd, 1); 
 						close(fd);
-						return 0;
 					}
 					if(proc->err_file)	{
 						int fd = open(proc->in_file, O_RDWR | O_CREAT);
