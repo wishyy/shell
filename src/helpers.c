@@ -15,7 +15,7 @@ void farewells(List_t *bglist)  {
 				exit(EXIT_FAILURE);
 		}
         if(wait_result > 0) {
-            printf(BG_TERM, temp->pid, temp->job->line);
+            fprintf(stdout, BG_TERM, temp->pid, temp->job->line);
             cur = cur->next;
             free(temp->job->line);
             free(temp->job);
@@ -37,7 +37,7 @@ void killthemall(List_t *bglist)   {
         kill(temp->pid, SIGKILL);
         wait_result = waitpid(temp->pid, &exit_status, 0);
         if(wait_result < 0) {
-            printf(WAIT_ERR);
+            fprintf(stdout, WAIT_ERR);
 			exit(EXIT_FAILURE);
         }
         free(temp->job->line);
