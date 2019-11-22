@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 			if(job->procs->argv[1] == NULL)
 				chdir(getenv("HOME"));
 			else if(chdir(job->procs->argv[1]) < 0)	
-				perror(DIR_ERR);
+				fprintf(stderr, DIR_ERR);
 			else
 				printf("%s\n", getcwd(s, 100));
 			free(job);
