@@ -40,6 +40,7 @@ void killthemall(List_t *bglist)   {
             fprintf(stdout, WAIT_ERR);
 			exit(EXIT_FAILURE);
         }
+        fprintf(stdout, BG_TERM, temp->pid, temp->job->line);
         free(temp->job->line);
         free(temp->job);
         free(temp);
