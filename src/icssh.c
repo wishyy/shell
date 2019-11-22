@@ -72,13 +72,13 @@ int main(int argc, char* argv[]) {
 				chdir(getenv("HOME"));
 			else if(chdir(job->procs->argv[1]) < 0)	{
 				perror(DIR_ERR);
-				free(job);
-				free(line); 
-				continue;
+				
 			}
+			else	{
 			printf("%s\n", getcwd(s, 100));
+			}
 			free(job);
-			free(line); 
+			free(line);
 			continue;
 		}
 
