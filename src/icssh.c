@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 
 		//built-in: estatus
 		if(strcmp(job->procs->cmd, "estatus") == 0)	{
-			printf("%d\n", WIFEXITED(exit_status));
+			printf("%d\n", WEXITSTATUS(exit_status));
 			free(job);
 			free(line);
 			continue;
