@@ -116,7 +116,8 @@ int main(int argc, char* argv[]) {
 					if(proc->in_file)	{
 						int fd = open(proc->in_file, O_RDONLY);
 						if(fd < 0)	{
-							perror(RD_ERR);
+							fprintf(stderr, RD_ERR);
+							exit(EXIT_FAILURE);
 						}
 						dup2(fd, 0); 
 						close(fd);
@@ -124,7 +125,8 @@ int main(int argc, char* argv[]) {
 					if(proc->out_file)	{
 						int fd = open(proc->out_file, O_RDWR | O_CREAT, 0664);
 						if(fd < 0)	{
-							perror(RD_ERR);
+							fprintf(stderr, RD_ERR);
+							exit(EXIT_FAILURE);
 						}
 						dup2(fd, 1); 
 						close(fd);
@@ -132,7 +134,8 @@ int main(int argc, char* argv[]) {
 					if(proc->err_file)	{
 						int fd = open(proc->err_file, O_RDWR | O_CREAT, 0664);
 						if(fd < 0)	{
-							perror(RD_ERR);
+							fprintf(stderr, RD_ERR);
+							exit(EXIT_FAILURE);
 						}
 						dup2(fd, 2); 
 						close(fd);
